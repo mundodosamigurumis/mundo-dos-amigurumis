@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Loja Virtual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cherry Bomb', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #fff;
+        }
+
+        header {
+            background-color: #734A91;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        header h1,
+        header h2,
+        .banner h1 {
+            margin: 0;
+            font-size: 2em;
+            text-shadow: 3px 3px 0px #000;
+            -webkit-text-stroke: 0.5px #000000; /* Adiciona o contorno fino */
+        }
+
+        header h2 {
+            font-size: 1.5em;
+            text-shadow: 3px 3px 0px #000;
+            -webkit-text-stroke: 0.5px #000000; /* Adiciona o contorno fino */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #734A91;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .banner {
+            background-color: #C879FF;
+            color: #fff;
+            text-align: center;
+            padding: 50px 0;
+            background-image: url('https://i.imgur.com/JdvPjzy.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .banner h1 {
+            margin: 0;
+            font-size: 2em;
+            text-shadow: 3px 3px 0px #000;
+            -webkit-text-stroke: 0.5px #000000; /* Adiciona o contorno fino */
+        }
+
+        .products {
+            display: flex;
+            overflow-x: auto;
+            padding: 20px;
+            margin: 0 auto;
+            background-image: url('https://i.imgur.com/nyZSYMZ.jpg'); /* Substitua pelo URL da sua imagem de fundo */
+            background-size: cover;
+            background-position: center;
+            scroll-snap-type: x mandatory;
+        }
+
+        .products {
+            display: flex;
+            overflow-x: auto; /* Habilita a rolagem horizontal */
+            padding: 20px;
+            margin: 0 auto;
+            background-color: #000000;
+            scroll-snap-type: x mandatory; /* Garante que cada item pare suavemente na rolagem */
+        }
+
+        .product-card {
+            background-color: rgba(0, 0, 0, 0); /* Transparência completa */
+            border: 1px solid rgba(0, 0, 0, 0); /* Borda com 50% de opacidade */
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            flex: 0 0 300px;
+            box-sizing: border-box;
+            transition: transform 0.2s;
+            scroll-snap-align: start;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product-card h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #fff;
+            -webkit-text-stroke: 0.5px #000000; /* Adiciona o contorno fino */
+        }
+        
+        .product-card h3 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #fff;
+            -webkit-text-stroke: 0.5px #000000; /* Adiciona o contorno fino */
+        }
+        .product-card p {
+            color: #000000;
+            margin: 10px 0;
+        }
+
+        .product-card button {
+            background-color: #C879FF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product-card button:hover {
+            background-color: #C879FF;
+            opacity: 0.8;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        footer {
+            background-color: #C879FF;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function enviarMensagem(imagemUrl, produtoNome) {
+            const numeroWhatsApp = '+55 98 7020-9859';
+            const mensagem = `Olá, gostaria de comprar o ${produtoNome}. Aqui está a imagem do amigurumi: ${imagemUrl}`;
+            const link = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
+
+            window.open(link, '_blank');
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('myModal');
+            const modalImage = document.getElementById('modalImage');
+            modal.style.display = "flex";
+            modalImage.src = imageSrc;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <header id="home">
+        <div class="logo-container">
+            <img src="https://i.imgur.com/WsiioS6.jpg" alt="Logo Mundo Dos Amigurumis" class="logo">
+            <div>
+                <h1>Mundo</h1>
+                <h2>Dos Amigurumis</h2>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <div class="banner">
+        <h1>Bem-vindos Ao Mundo Encantado Dos Amigurumis</h1>
+        <p>Onde cada peça é feita com carinho e criatividade para trazer alegria ao seu dia!</p>
+    </div>
+
+    <div id="produtos" class="products">
+        <div class="product-card">
+            <img src="https://i.imgur.com/tWTslHZ.jpg" alt="Mini Me" onclick="openModal('https://i.imgur.com/tWTslHZ.jpg')">
+            <h2>Mini Me</h2>
+            <h3>Informações:Crie um amigurumi seu e personalize!</h3>
+            <button onclick="enviarMensagem('https://i.imgur.com/tWTslHZ.jpg', 'Mini Me')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/zHByaOy.jpg" alt="Porquinho" onclick="openModal('https://i.imgur.com/zHByaOy.jpg')">
+            <h2>Leão</h2>
+            <p>R$140,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/zHByaOy.jpg', 'Porquinho')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/rXTQf1s.jpg" alt="Anne com E" onclick="openModal('https://i.imgur.com/rXTQf1s.jpg')">
+            <h2>Anne com E</h2>
+            <p>R$100,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/rXTQf1s.jpg', 'Anne com E')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/MHspx5p.jpg" alt="Capivara" onclick="openModal('https://i.imgur.com/MHspx5p.jpg')">
+            <h2>Capivara</h2>
+            <p>R$20,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/MHspx5p.jpg', 'Capivara')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/NX8CfTC.jpg" alt="Porquinho" onclick="openModal('https://i.imgur.com/NX8CfTC.jpg')">
+            <h2>Porquinho</h2>
+            <p>R$90,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/NX8CfTC.jpg', 'Porquinho')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/icdKhQv.jpg" alt="Minions" onclick="openModal('https://i.imgur.com/icdKhQv.jpg')">
+            <h2>Minions</h2>
+            <p>R$20,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/icdKhQv.jpg', 'Minions')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/IVthVjT.jpg" alt="Law" onclick="openModal('https://i.imgur.com/IVthVjT.jpg')">
+            <h2>Law</h2>
+            <p>R$50,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/IVthVjT.jpg', 'Law')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/r0MPcxD.jpg" alt="Pintinho no Balanço" onclick="openModal('https://i.imgur.com/r0MPcxD.jpg')">
+            <h2>Pintinho no Balanço</h2>
+            <p>R$20,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/r0MPcxD.jpg', 'Pintinho no Balanço')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/8ff65Ub.jpg" alt="Snoopy" onclick="openModal('https://i.imgur.com/8ff65Ub.jpg')">
+            <h2>Snoopy</h2>
+            <p>R$50,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/8ff65Ub.jpg', 'Snoopy')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/rOmK6aq.jpg" alt="Pinguim" onclick="openModal('https://i.imgur.com/rOmK6aq.jpg')">
+            <h2>Pinguim</h2>
+            <p>R$60,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/rOmK6aq.jpg', 'Pinguim')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/ugIhTeE.jpg" alt="Vasinho de Girassol" onclick="openModal('https://i.imgur.com/ugIhTeE.jpg')">
+            <h2>Vasinho de Girassol</h2>
+            <p>R$45,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/ugIhTeE.jpg', 'Vasinho de Girassol')">Comprar</button>
+        </div>
+        <div class="product-card">
+            <img src="https://i.imgur.com/TikkLP9.jpg" alt="Homem-Aranha" onclick="openModal('https://i.imgur.com/TikkLP9.jpg')">
+            <h2>Homem-Aranha</h2>
+            <p>R$40,00</p>
+            <button onclick="enviarMensagem('https://i.imgur.com/TikkLP9.jpg', 'Homem-Aranha')">Comprar</button>
+        </div>
+    </div>
+
+    <div id="contato" class="contact-info">
+        <h3>Contato:</h3>
+        <h3><span style="color: #734A91;">Contato</h3>
+        <p><span style="color: #734A91;">WhatsApp: <a href="https://api.whatsapp.com/send?phone=559870209859" style="color: #734A91;">+559870209859</a></p>
+        <p><span style="color: #734A91;">Instagram: <a href="https://www.instagram.com/mundodos_amigurumis/" style="color: #734A91;">@mundodos_amigurumis</a></p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Mundo Dos Amigurumis.</p>
+    </footer>
+
+    <!-- Modal para visualização das imagens -->
+    <div id="myModal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+</body>
+</html>
